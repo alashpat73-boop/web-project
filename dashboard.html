@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة المهام - لوحة التحكم</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1>نظام إدارة المهام</h1>
+                <div class="header-actions">
+                    <button id="themeToggle" class="theme-btn">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                    <span id="welcomeText" class="welcome-text">مرحباً</span>
+                    <a href="auth/logout.php" class="logout-btn">تسجيل الخروج</a>
+                </div>
+            </div>
+        </header>
+        
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li><a href="#dashboard" class="nav-link active" data-section="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">لوحة التحكم</span>
+                </a></li>
+                <li><a href="#todos" class="nav-link" data-section="todos">
+                    <span class="nav-icon">✅</span>
+                    <span class="nav-text">المهام</span>
+                </a></li>
+                <li><a href="#notes" class="nav-link" data-section="notes">
+                    <span class="nav-icon">📝</span>
+                    <span class="nav-text">الملاحظات</span>
+                </a></li>
+                <li><a href="#lectures" class="nav-link" data-section="lectures">
+                    <span class="nav-icon">🎓</span>
+                    <span class="nav-text">المحاضرات</span>
+                </a></li>
+                <li><a href="#projects" class="nav-link" data-section="projects">
+                    <span class="nav-icon">📁</span>
+                    <span class="nav-text">المشاريع</span>
+                </a></li>
+            </ul>
+        </nav>
+        
+        <main class="main-content">
+            <!-- لوحة التحكم الرئيسية -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="section-header">
+                    <h2>لوحة التحكم</h2>
+                </div>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <h3 id="totalTodos">0</h3>
+                            <p>إجمالي المهام</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-info">
+                            <h3 id="totalNotes">0</h3>
+                            <p>إجمالي الملاحظات</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎓</div>
+                        <div class="stat-info">
+                            <h3 id="totalLectures">0</h3>
+                            <p>إجمالي المحاضرات</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📁</div>
+                        <div class="stat-info">
+                            <h3 id="totalProjects">0</h3>
+                            <p>إجمالي المشاريع</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="recent-activities">
+                    <h3>النشاطات الأخيرة</h3>
+                    <div id="recentActivities" class="activities-list">
+                        <!-- سيتم ملؤها بـ JavaScript -->
+                    </div>
+                </div>
+            </section>
+            
+            <!-- قسم المهام -->
+            <section id="todos-section" class="content-section">
+                <div class="section-header">
+                    <h2>إدارة المهام</h2>
+                    <button class="add-btn" data-type="todo">
+                        <span class="btn-icon">➕</span>
+                        <span class="btn-text">إضافة مهمة جديدة</span>
+                    </button>
+                </div>
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">الكل</button>
+                    <button class="filter-tab" data-filter="pending">في الانتظار</button>
+                    <button class="filter-tab" data-filter="completed">مكتملة</button>
+                </div>
+                <div id="todos-list" class="items-grid"></div>
+            </section>
+            
+            <!-- قسم الملاحظات -->
+            <section id="notes-section" class="content-section">
+                <div class="section-header">
+                    <h2>إدارة الملاحظات</h2>
+                    <button class="add-btn" data-type="note">
+                        <span class="btn-icon">➕</span>
+                        <span class="btn-text">إضافة ملاحظة جديدة</span>
+                    </button>
+                </div>
+                <div class="search-box">
+                    <input type="text" id="notesSearch" placeholder="البحث في الملاحظات...">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <div id="notes-list" class="items-grid"></div>
+            </section>
+            
+            <!-- قسم المحاضرات -->
+            <section id="lectures-section" class="content-section">
+                <div class="section-header">
+                    <h2>إدارة المحاضرات</h2>
+                    <button class="add-btn" data-type="lecture">
+                        <span class="btn-icon">➕</span>
+                        <span class="btn-text">إضافة محاضرة جديدة</span>
+                    </button>
+                </div>
+                <div class="calendar-view">
+                    <div class="calendar-header">
+                        <button id="prevMonth" class="calendar-nav">‹</button>
+                        <h3 id="currentMonth"></h3>
+                        <button id="nextMonth" class="calendar-nav">›</button>
+                    </div>
+                    <div id="calendar" class="calendar-grid"></div>
+                </div>
+                <div id="lectures-list" class="items-grid"></div>
+            </section>
+            
+            <!-- قسم المشاريع -->
+            <section id="projects-section" class="content-section">
+                <div class="section-header">
+                    <h2>إدارة المشاريع</h2>
+                    <button class="add-btn" data-type="project">
+                        <span class="btn-icon">➕</span>
+                        <span class="btn-text">إضافة مشروع جديد</span>
+                    </button>
+                </div>
+                <div class="project-board">
+                    <div class="project-column">
+                        <h3 class="column-title">في الانتظار</h3>
+                        <div id="pending-projects" class="project-list"></div>
+                    </div>
+                    <div class="project-column">
+                        <h3 class="column-title">قيد التنفيذ</h3>
+                        <div id="progress-projects" class="project-list"></div>
+                    </div>
+                    <div class="project-column">
+                        <h3 class="column-title">مكتملة</h3>
+                        <div id="completed-projects" class="project-list"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- نافذة منبثقة لإضافة/تعديل العناصر -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">إضافة عنصر جديد</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="modal-form" class="modal-form">
+                <div id="form-fields"></div>
+                <div class="modal-actions">
+                    <button type="submit" class="save-btn">
+                        <span class="btn-icon">💾</span>
+                        <span class="btn-text">حفظ</span>
+                    </button>
+                    <button type="button" class="cancel-btn" onclick="closeModal()">
+                        <span class="btn-icon">❌</span>
+                        <span class="btn-text">إلغاء</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="message" class="message hidden"></div>
+    
+    <script src="js/dashboard.js"></script>
+    <script src="js/theme.js"></script>
+</body>
+</html>
