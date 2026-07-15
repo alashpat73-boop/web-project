@@ -48,3 +48,66 @@
 ## الدعم
 
 هذا المشروع مفتوح المصدر ومجاني للاستخدام الشخصي والتجاري.
+
+
+
+PROJECT E V2/
+│
+├── api/
+├── auth/
+├── config/
+├── css/
+├── js/
+├── public/
+├── uploads/
+├── logs/
+├── database/
+│   ├── task_manager.sql
+│   └── backups/
+│
+├── docker/
+│   ├── apache/
+│   │   └── vhost.conf
+│   ├── php/
+│   │   └── Dockerfile
+│   └── mysql/
+│
+├── tests/          ← سنستخدمه لاحقًا لاختبارات الأمن والجودة
+│
+├── docs/           ← التوثيق
+│
+├── .env
+├── .gitignore
+├── docker-compose.yml
+├── README.md
+└── ...
+
+
+
+
+ستصبح البيئة:
+
+
+Container PHP
+
+/
+├── Apache
+│
+├── PHP 8.2
+│
+├── Extensions
+│    ├── mysqli
+│    ├── PDO
+│    └── PDO MySQL
+│
+├── Tools
+│    ├── git
+│    ├── curl
+│    ├── zip
+│
+└── /var/www/html
+      |
+      ├── index.php
+      ├── css
+      ├── js
+      └── images
