@@ -1,113 +1,110 @@
-# نظام إدارة المهام
+# Task Manager
 
-نظام بسيط وآمن لإدارة المهام والملاحظات والمحاضرات والمشاريع مع نظام تسجيل دخول متكامل.
+A secure task management web application built with native PHP and Docker.
 
-## المميزات
+---
 
-- نظام تسجيل دخول وإنشاء حساب آمن
-- إدارة المهام مع إمكانية وضع علامة كمكتملة
-- إدارة الملاحظات الشخصية
-- جدولة وإدارة المحاضرات
-- متابعة المشاريع بحالات مختلفة
-- خاصية الوضع الليلي والنهاري
-- تصميم متجاوب يعمل على جميع الأجهزة
-- حماية كاملة للبيانات والجلسات
+## Features
 
-## متطلبات التشغيل
+- Native PHP (No Framework)
+- Docker Development Environment
+- Apache
+- MySQL
+- phpMyAdmin
+- Responsive UI
+- Secure Authentication
+- Environment Variables
+- Health Checks
 
-- خادم ويب يدعم PHP 7.4 أو أحدث
-- قاعدة بيانات MySQL 5.7 أو أحدث
-- mod_rewrite مفعل (اختياري)
+---
 
-## التثبيت
+## Technology Stack
 
-1. انسخ جميع الملفات إلى مجلد الخادم
-2. أنشئ قاعدة بيانات جديدة وشغّل ملف `database.sql`
-3. عدّل إعدادات قاعدة البيانات في `config/database.php`
-4. تأكد من أن مجلد المشروع له صلاحيات القراءة والكتابة
+| Technology | Version |
+|------------|----------|
+| PHP | 8.2 |
+| Apache | Latest |
+| MySQL | 8 |
+| Docker | Latest |
+| Docker Compose | Latest |
+| HTML | 5 |
+| CSS | 3 |
+| JavaScript | ES6 |
 
-## الاستخدام
+---
 
-1. افتح الموقع في المتصفح
-2. أنشئ حساب جديد أو سجل دخولك
-3. استخدم القائمة الجانبية للتنقل بين الأقسام المختلفة
-4. أضف وعدّل المهام والملاحظات حسب حاجتك
+## Architecture
 
-## الأمان
+Browser
 
-- كلمات المرور مشفرة بـ password_hash
-- حماية ضد حقن SQL باستخدام prepared statements
-- فحص صلاحيات المستخدم في جميع العمليات
-- حماية ضد XSS وCSRF
-- جلسات آمنة ومحمية
+↓
 
-## التخصيص
+Apache
 
-يمكنك تعديل الألوان والخطوط من خلال متغيرات CSS في ملف `css/styles.css`.
+↓
 
-## الدعم
+PHP
 
-هذا المشروع مفتوح المصدر ومجاني للاستخدام الشخصي والتجاري.
+↓
 
+MySQL
 
+---
 
-PROJECT E V2/
-│
-├── api/
-├── auth/
-├── config/
-├── css/
-├── js/
-├── public/
-├── uploads/
-├── logs/
-├── database/
-│   ├── task_manager.sql
-│   └── backups/
-│
-├── docker/
-│   ├── apache/
-│   │   └── vhost.conf
-│   ├── php/
-│   │   └── Dockerfile
-│   └── mysql/
-│
-├── tests/          ← سنستخدمه لاحقًا لاختبارات الأمن والجودة
-│
-├── docs/           ← التوثيق
-│
-├── .env
-├── .gitignore
-├── docker-compose.yml
-├── README.md
-└── ...
+## Quick Start
 
+```bash
+git clone https://github.com/USERNAME/task-manager.git
+```
 
+```bash
+cp .env.example .env
+```
 
+```bash
+docker compose up -d --build
+```
 
-ستصبح البيئة:
+Open
 
+```
+http://localhost:8080
+```
 
-Container PHP
+phpMyAdmin
 
-/
-├── Apache
-│
-├── PHP 8.2
-│
-├── Extensions
-│    ├── mysqli
-│    ├── PDO
-│    └── PDO MySQL
-│
-├── Tools
-│    ├── git
-│    ├── curl
-│    ├── zip
-│
-└── /var/www/html
-      |
-      ├── index.php
-      ├── css
-      ├── js
-      └── images
+```
+http://localhost:8081
+```
+
+---
+
+## Current Version
+
+Version
+
+```
+2.0.0-dev
+```
+
+---
+
+## Project Status
+
+- Docker Environment ✅
+- PHP Container ✅
+- Apache ✅
+- MySQL ✅
+- phpMyAdmin ✅
+- Docker Network ✅
+- Health Checks ✅
+
+---
+
+## Upcoming
+
+- SonarQube
+- Semgrep
+- OWASP ZAP
+- Trivy
+- GitHub Actions
