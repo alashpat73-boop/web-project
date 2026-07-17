@@ -1,0 +1,85 @@
+# ==========================================================
+# GitHub Actions Workflow
+# Tool: Semgrep (SAST)
+#
+# الوظيفة:
+# تشغيل Semgrep تلقائياً عند كل Push أو Pull Request
+# وإنشاء تقرير SARIF ورفعه إلى GitHub Code Scanning.
+# ==========================================================
+
+name: Semgrep SAST Scan
+
+# ==========================================================
+# متى يتم تشغيل الفحص؟
+# ==========================================================
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+# ==========================================================
+# الصلاحيات
+# ==========================================================
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+
+  semgrep:
+
+    name: Semgrep Security Scan
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # ----------------------------------------------------
+      # تحميل ملفات المشروع
+      # ----------------------------------------------------
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # ----------------------------------------------------
+      # تثبيت Python
+      # ----------------------------------------------------
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # ----------------------------------------------------
+      # تثبيت Semgrep
+      # ----------------------------------------------------
+      - name: Install Semgrep
+        run: |
+          python -m pip install --upgrade pip
+          pip install semgrep
+
+      # ----------------------------------------------------
+      # تشغيل الفحص
+      #
+      # لا نريد أن يفشل الـ Workflow إذا وُجدت ثغرات،
+      # وإنما نريد فقط إنشاء التقرير.
+      # ----------------------------------------------------
+      - name: Run Semgrep
+        continue-on-error: true
+        run: |
+          semgrep scan \
+            --config=p/security-audit \
+            --sarif \
+            --output semgrep.sarif
+
+      # ----------------------------------------------------
+      # رفع التقرير إلى GitHub Security
+      # ----------------------------------------------------
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: semgrep.sarif
