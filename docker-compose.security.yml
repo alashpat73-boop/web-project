@@ -1,0 +1,204 @@
+services:
+
+  # ==========================================
+  # SonarQube Database (PostgreSQL)
+  # ==========================================
+
+  postgres:
+    init: true
+
+    image: postgres:16
+
+    container_name: task_manager_sonarqube_postgres
+
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    environment:
+      POSTGRES_USER: ${SONAR_USER}
+      POSTGRES_PASSWORD: ${SONAR_PASSWORD}
+      POSTGRES_DB: ${SONAR_DB}
+
+    volumes:
+      - sonarqube_db:/var/lib/postgresql/data
+
+    networks:
+      - task_manager_network
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${SONAR_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  # ==========================================
+  # SonarQube
+  # ==========================================
+
+  sonarqube:
+    init: true
+
+    image: sonarqube:lts-community
+
+    container_name: task_manager_sonarqube
+
+    restart: unless-stopped
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    env_file:
+      - .env
+
+    ports:
+      - "9000:9000"
+
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://postgres:5432/${SONAR_DB}
+      SONAR_JDBC_USERNAME: ${SONAR_USER}
+      SONAR_JDBC_PASSWORD: ${SONAR_PASSWORD}
+
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_extensions:/opt/sonarqube/extensions
+
+    networks:
+      - task_manager_network
+
+
+  sonar-scanner:
+    init: true
+
+    image: sonarsource/sonar-scanner-cli:latest
+
+    profiles:
+      - tools
+
+    depends_on:
+      sonarqube:
+        condition: service_started
+
+    env_file:
+      - .env
+
+    environment:
+      SONAR_HOST_URL: http://sonarqube:9000
+      SONAR_TOKEN: ${SONAR_TOKEN}
+
+    volumes:
+      - ./:/usr/src
+
+    working_dir: /usr/src
+
+    command: >
+      sonar-scanner
+      -Dsonar.host.url=http://sonarqube:9000
+      -Dsonar.token=${SONAR_TOKEN}
+      -Dsonar.projectBaseDir=/usr/src
+
+    networks:
+      - task_manager_network
+
+
+    # ==========================================
+  # Semgrep (Static Application Security Testing)
+  # ==========================================
+
+  semgrep:
+    init: true
+
+    build:
+      context: .
+      dockerfile: docker/semgrep/Dockerfile
+
+    profiles:
+      - tools
+
+    # انتظار تشغيل SonarQube ليس ضرورياً،
+    # لكنه يجعل جميع أدوات الأمن تعمل ضمن نفس البيئة.
+    depends_on:
+      sonarqube:
+        condition: service_started
+
+    # ربط مجلد المشروع داخل /src
+    volumes:
+      - ./:/src
+
+    # مجلد العمل داخل الحاوية
+    working_dir: /src
+
+    # استخدام نفس شبكة المشروع
+    networks:
+      - task_manager_network
+
+    # تشغيل Semgrep
+    command:
+      - scan
+
+      # استخدام قواعد OWASP Top 10 الرسمية
+      - --config=p/owasp-top-ten
+
+      # إنشاء تقرير JSON
+      - --json
+
+      # حفظ التقرير داخل المشروع
+      - --output=reports/semgrep/semgrep.json
+
+      # فحص مجلد المشروع الحالي
+      - .
+
+   # ==========================================
+  # OWASP ZAP
+  # Dynamic Application Security Testing (DAST)
+  # ==========================================
+
+  zap:
+    image: ghcr.io/zaproxy/zaproxy:stable
+
+    container_name: task_manager_zap
+
+    init: true
+
+    restart: "no"
+
+    profiles:
+      - tools
+
+    # مجلد العمل الرسمي الذي تتوقعه أدوات ZAP
+    working_dir: /zap/wrk
+
+    # ربط المشروع داخل /zap/wrk
+    volumes:
+      - ./:/zap/wrk
+
+    networks:
+      - task_manager_network
+    
+
+# ==========================================
+# Volumes
+# ==========================================
+
+volumes:
+
+  sonarqube_db:
+
+  sonarqube_data:
+
+  sonarqube_logs:
+
+  sonarqube_extensions:
+
+
+# ==========================================
+# Networks
+# ==========================================
+
+networks:
+  task_manager_network:
+    driver: bridge

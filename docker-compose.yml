@@ -87,9 +87,25 @@ services:
     networks:
       - task_manager_network
 
+
+
+
+
+
 volumes:
+
   mysql_data:
+
+  sonarqube_db:
+
+  sonarqube_data:
+
+  sonarqube_logs:
+
+  sonarqube_extensions:
+
 
 networks:
   task_manager_network:
     driver: bridge
+

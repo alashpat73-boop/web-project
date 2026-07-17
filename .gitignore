@@ -87,3 +87,11 @@ reports/
 
 *.sqlite
 *.sqlite3
+
+
+# Security Reports
+reports/semgrep/*.json
+reports/semgrep/*.sarif
+reports/semgrep/*.html
+reports/zap/*
+reports/merged/*
