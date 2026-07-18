@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🚀 Task Manager
 
 > A secure PHP Task Manager application containerized with Docker and integrated with modern security analysis tools including **SonarQube**, **Semgrep**, **OWASP ZAP**, and **GitHub Actions**.
@@ -80,37 +81,7 @@ The project demonstrates how to build a secure web application using Docker whil
 
 # 📂 Project Structure
 
-```
-project/
 
-├── api/
-├── auth/
-├── config/
-├── css/
-├── database/
-├── docker/
-│   ├── apache/
-|            └── vhost.conf
-│   ├── php/
-│   └── zap/
-│
-├── docs/
-│   ├── images/
-│   ├── reports/
-│   └── user-guide/
-│
-├── reports/
-│   ├── semgrep/
-│   ├── sonarqube/
-│   └── zap/
-│
-├── scripts/
-│
-├── docker-compose.yml
-├── docker-compose.security.yml
-├── Dockerfile
-├── sonar-project.properties
-└── README.md
 ```
 project/
 │
@@ -420,3 +391,5 @@ Cybersecurity Student
 # 📄 License
 
 This project is intended for educational purposes.
+=======
+
